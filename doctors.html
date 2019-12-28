@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Doctors</title>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+
+  <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <script>
+  
+  </script>
+  <body>
+    <div class="row">
+      <div class="col">
+       asdfasd
+      </div>
+    </div>
+    <div id="map"></div>
+    
+    <script>
+      // This example creates circles on the map, representing populations in North
+      // America.
+
+      $(document).ready(function() {
+
+        console.log("ready");
+        var lat = 35.8418724;
+        var lon = -90.7046663;
+        var city = "Los Angeles";
+        var state = "CA";
+        var pageSize = 10;
+        var pageNumber = 0;
+        var radius = 25;
+        $.ajax({
+            headers: {
+                "token":"test-token"
+            },
+            url: "http://localhost:8090/doc/v2/doctors?type=Individual&city="+city+"&state="+state+"&lat="+lat+"&lon="+lon+"&size="+pageSize+"&page="+pageNumber+"&radius="+radius
+        }).then(function(data) {
+            console.log("response");
+            console.log(data);
+            console.log(data.content);
+
+            var content = data.content;
+  
+            console.log("latLongs");
+            window.eqfeed_callback = function() {
+             for(var i=0;i<content.length;i++){
+                var doctor = content[i];
+                var locations = doctor.addresses;
+                for(var y=0;y<locations.length;y++){
+                  var location = locations[y];
+                  var marker = new google.maps.Marker({
+                    title: doctor.firstName+" "+doctor.lastName+"\n"+location.street+", "+location.street2+"\n"+location.zip+","+location.city+", "+location.state,
+                    draggable: true,
+                    animation: google.maps.Animation.DROP,
+                    position: new google.maps.LatLng(location.lat, location.lon),
+                    map: map
+                  });
+                }
+              }
+            }
+
+               // Create a <script> tag and set the USGS URL as the source.
+        var script = document.createElement('script');
+        // This example uses a local copy of the GeoJSON stored at
+        // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
+        script.src = 'https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js';
+        document.getElementsByTagName('head')[0].appendChild(script);
+
+        });
+      });
+
+      var map;
+      function initMap() {
+
+        // arkansas
+        var lat = 35.8418724;
+        var lon = -90.7046663;
+
+        var focalPoint = {lat:lat,lng:lon}
+
+        // Create the map.
+         map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 11,
+          center: focalPoint,
+          mapTypeId: 'terrain'
+        });
+
+
+        var highlightedCircle = new google.maps.Circle({
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillOpacity: 0.35,
+            map: map,
+            center: focalPoint,
+            radius: 32186.9// in meters
+        });
+        
+
+        window.eqfeed_callback = function() {
+            var marker = new google.maps.Marker({title:"center point",
+              position: new google.maps.LatLng(focalPoint.lat,focalPoint.lng),
+              map: map
+            });
+
+
+            marker.addListener('click', function() {
+              console.log("click click!");
+            });
+        }
+
+        // Create a <script> tag and set the USGS URL as the source.
+        var script = document.createElement('script');
+        // This example uses a local copy of the GeoJSON stored at
+        // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
+        script.src = 'https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js';
+        document.getElementsByTagName('head')[0].appendChild(script);
+      }
+    </script>
+     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCoyBjqcG9klXlIIXDSEMw75pr1uuszxgs&callback=initMap">
+    </script>
+  </body>
+</html>
