@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Radius</title>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      // This example creates circles on the map, representing populations in North
+      // America.
+
+ 
+      var map;
+      function initMap() {
+
+        var focalPoint = {lat:40.5159256,lon:-111.9406039};
+
+        // Define custom styles to hide POIs
+        const mapStyles = [
+            {
+                featureType: "poi",
+                elementType: "labels",
+                stylers: [{ visibility: "off" }],
+            },
+            {
+                featureType: "poi.business",
+                stylers: [{ visibility: "off" }],
+            },
+            {
+                featureType: "transit",
+                elementType: "labels.icon",
+                stylers: [{ visibility: "off" }],
+            }
+        ];
+
+        // Create the map.
+         map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 10,
+          center: focalPoint,
+          mapTypeId: 'terrain',
+          styles: mapStyles,
+        });
+
+        // map.zoom = 10;
+
+
+        // var highlightedCircle = new google.maps.Circle({
+        //     strokeOpacity: 0.8,
+        //     strokeWeight: 2,
+        //     fillOpacity: 0.35,
+        //     map: map,
+        //     center: focalPoint,
+        //     radius: 4000// in meters
+        //   });
+
+        // Create a <script> tag and set the USGS URL as the source.
+        var script = document.createElement('script');
+        // This example uses a local copy of the GeoJSON stored at
+        // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
+        script.src = 'https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js';
+        document.getElementsByTagName('head')[0].appendChild(script);
+
+
+        var latLongs = [];
+        latLongs[0] = {lat:33.90198,lon:-118.37884};
+        // latLongs[1] = {lat:33.92006733472,lon:-118.41477805884};
+        // latLongs[2] = {lat:33.93815466944,lon:-118.34290194116};
+        // latLongs[3] = {lat:33.874848997920004,lon:-118.36985548529};
+        // latLongs[4] = {lat:33.91102366736,lon:-118.34290194116};
+        // latLongs[7] = {lat:33.892936332640005,lon:-118.41477805884};
+        // latLongs[8] = {lat:33.92006733472,lon:-118.35188645587};
+
+
+        // 12952 S 1785 W, Riverton, UT 84065
+        latLongs[1] = {lat:40.5159256,lon:-111.9406039};
+
+
+        // 9660 Fairdale Ln, Houston, TX 77063
+        latLongs[2] = {lat:29.7310238,lon:-95.53894720000001};
+
+        // Create a new LatLngBounds object
+        const bounds = new google.maps.LatLngBounds();
+
+        for (var i = 0; i < latLongs.length; i++) {
+          var marker = new google.maps.Marker({
+            position: new google.maps.LatLng(latLongs[i].lat,latLongs[i].lon),
+            icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+            map: map
+          });
+
+          // Extend the bounds to include each marker's position
+          bounds.extend(marker.getPosition());
+        }
+
+        // Adjust the map's bounds to fit all markers within the view
+        /**
+         * Benefits of Using fitBounds
+            Dynamic Centering: The map automatically centers itself based on the markers.
+            Dynamic Zoom: The zoom level adjusts to fit all markers within the viewport, ensuring that all your store locations are visible.
+            Improved User Experience: Users can see all relevant locations without manually zooming or panning.
+        */
+        map.fitBounds(bounds);
+      }
+
+      window.eqfeed_callback = function() {
+        
+      }
+    </script>
+     <script async defer src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap">
+    </script>
+  </body>
+</html>
