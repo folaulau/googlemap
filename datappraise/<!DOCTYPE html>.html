@@ -20,7 +20,7 @@
   </head>
   <body>
     <div id="map"></div>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap">
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-IjW13pGD7URsqPlOlYlqLeaI4CNRU3o&callback=initMap">
     </script>
     <script>
       var map;
@@ -54,26 +54,9 @@
         });
 
         var latLongs = [];
-
-        /**
-         *  addresses from different states
-         * 
-         * */
-        // latLongs[0] = {lat: 33.90198, lng: -118.37884};
-        // latLongs[1] = {lat: 40.5159256, lng: -111.9406039};
-        // latLongs[2] = {lat: 29.7310238, lng: -95.53894720000001};
-
-        /**
-         * UT addresses
-         * */
-        //3659 Roy Ln, Riverton, UT 84065
-        latLongs[0] = {lat: 40.5319565, lng: -111.9780716};
-
-        //3070 W 12130 S, Riverton, UT 84065
-        latLongs[1] = {lat: 40.531028, lng: -111.96525};
-
-        //2595 W 13095th Cir S
-        latLongs[2] = {lat: 40.5128288, lng: -111.9556699};
+        latLongs[0] = {lat: 33.90198, lng: -118.37884};
+        latLongs[1] = {lat: 40.5159256, lng: -111.9406039}; // The address to focus on
+        latLongs[2] = {lat: 29.7310238, lng: -95.53894720000001};
 
         // Create a new LatLngBounds object
         const bounds = new google.maps.LatLngBounds();
